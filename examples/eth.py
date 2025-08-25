@@ -47,19 +47,16 @@ exchange = ccxt.binance({
         'api': {
             'public': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/api/v3',
             'private': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/api/v3',
-        },
-        'fapiPublic': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/fapi/v1',
-        'fapiPrivate': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/fapi/v1',
-        'dapiPublic': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/dapi/v1',
-        'dapiPrivate': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/dapi/v1',
-        'sapiPublic': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/sapi/v1',
-        'sapiPrivate': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/sapi/v1',
+        }
     },
     'timeout': 30000,  # 30秒超时
     'enableRateLimit': True,  # 启用速率限制
-    'hostname': 'zysipeyigmoy.eu-central-1.clawcloudrun.com',
     'options': {
+        'fetchMarkets': ['spot'],  # 只获取现货市场
         'defaultType': 'spot',  # 明确使用现货交易
+        'spot': True,
+        'future': False,
+        'margin': False,
     }
 })
 symbol = 'ETH/USDT'  # 交易对
