@@ -68,7 +68,8 @@ tokenizer = KronosTokenizer.from_pretrained("NeoQuasar/Kronos-Tokenizer-base")
 model = Kronos.from_pretrained("NeoQuasar/Kronos-small")
 
 # 初始化预测器
-predictor = KronosPredictor(model, tokenizer, device="cuda:0", max_context=512)
+# predictor = KronosPredictor(model, tokenizer, device="cuda:0", max_context=512)
+predictor = KronosPredictor(model, tokenizer, device="cpu", max_context=512)
 
 # 准备数据
 lookback = limit  # 使用最新的400条数据
