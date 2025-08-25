@@ -41,7 +41,15 @@ def calculate_percentage_change(actual, predicted):
     return (predicted - actual) / actual * 100
 
 # 获取 ETH/USDT 的历史数据
-exchange = ccxt.binance()  # 初始化 Binance API
+# exchange = ccxt.binance()  # 初始化 Binance API
+exchange = ccxt.binance({
+    'urls': {
+        'api': {
+            'public': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/api/v3', 
+            'private': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/api/v3',
+        }
+    }
+})
 symbol = 'ETH/USDT'  # 交易对
 timeframe = '15m'  # 时间框架：15分钟
 limit = 400  # 获取的数据条数，最多获取1000个数据点
