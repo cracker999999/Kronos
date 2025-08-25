@@ -52,7 +52,9 @@ exchange = ccxt.binance({
         'fapiPrivate': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/fapi/v1',
         'dapiPublic': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/dapi/v1',
         'dapiPrivate': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/dapi/v1',
-    }
+    },
+    'timeout': 30000,  # 30秒超时
+    'enableRateLimit': True,  # 启用速率限制
 })
 symbol = 'ETH/USDT'  # 交易对
 timeframe = '15m'  # 时间框架：15分钟
