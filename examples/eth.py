@@ -45,8 +45,8 @@ def calculate_percentage_change(actual, predicted):
 exchange = ccxt.binance({
     'urls': {
         'api': {
-            'public': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/api/v3',
-            'private': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/api/v3',
+            'public': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/api/api/v3',
+            'private': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/api/api/v3',
         },
         'fapiPublic': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/fapi/fapi/v1',
         'fapiPrivate': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/fapi/fapi/v1',
