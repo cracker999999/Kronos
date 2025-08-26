@@ -17,24 +17,24 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp):
 
     # 绘制左边的历史数据（历史 Close Price）
     ax1.plot(kline_df['timestamp'], kline_df['close'], label='Close Price', color='blue', linewidth=1.5)
-    ax1.set_title('Historical Data', fontsize=16)
-    ax1.set_xlabel('Timestamp', fontsize=14)
-    ax1.set_ylabel('Close Price', fontsize=14)
+    ax1.set_title('历史数据', fontsize=16)
+    ax1.set_xlabel('', fontsize=12)
+    ax1.set_ylabel('收盘价', fontsize=12)
     ax1.grid(True)
     ax1.legend(loc='upper left', fontsize=12)
 
     # 绘制右边的预测数据（预测 Close Price）
     ax2.plot(y_timestamp, pred_df['close'], label='Predicted Close Price', color='red', linewidth=1.5)
-    ax2.set_title('Predicted Data', fontsize=16)
-    ax2.set_xlabel('Timestamp', fontsize=14)
-    ax2.set_ylabel('Close Price', fontsize=14)
+    ax2.set_title('预测数据', fontsize=16)
+    ax2.set_xlabel('', fontsize=12)
+    ax2.set_ylabel('收盘价', fontsize=12)
     ax2.grid(True)
     ax2.legend(loc='upper left', fontsize=12)
 
     # 格式化 X 轴为日期时间
     ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
     ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
-    plt.xticks(rotation=45)
+    plt.xticks(rotation=30)
 
     plt.tight_layout()
     plt.show()
@@ -142,4 +142,4 @@ plot_history_and_prediction(df, pred_df, y_timestamp)
 # 输出详细的预测和涨跌幅度数据
 print("\n详细预测结果及涨跌幅度：")
 for i in range(pred_len):
-    print(f"预测时间: {y_timestamp.iloc[i]} - 预测的 Close Price: {pred_df['close'].iloc[i]:.2f} - 涨跌幅度: {pred_changes.iloc[i]:.2f}%")
+    print(f"时间: {y_timestamp.iloc[i]} - 收盘价: {pred_df['close'].iloc[i]:.2f} - 涨跌幅度: {pred_changes.iloc[i]:.2f}%")
