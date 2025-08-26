@@ -5,6 +5,7 @@ matplotlib.use('Agg')  # 使用不需要图形界面的后端
 import matplotlib.pyplot as plt
 from model import Kronos, KronosTokenizer, KronosPredictor
 import matplotlib.dates as mdates
+import sys
 
 def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol):
     # 将所有时间戳转换为 naive 时间戳，去掉时区信息
@@ -50,7 +51,15 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol):
 def calculate_percentage_change(actual, predicted):
     return (predicted - actual) / actual * 100
 
-# 获取 ETH/USDT 的历史数据
+# 获取命令行参数
+if len(sys.argv) > 1:
+    symbol = sys.argv[1]  # 从命令行获取交易对
+else:
+    symbol = 'ETH/USDT'  # 默认交易对
+
+print(f"正在分析交易对: {symbol}")
+
+# 获取 {symbol} 的历史数据
 # exchange = ccxt.binance()  # 初始化 Binance API
 exchange = ccxt.binance({
     'urls': {
@@ -69,7 +78,7 @@ exchange = ccxt.binance({
         'margin': False,
     }
 })
-symbol = 'ETH/USDT'  # 交易对
+# symbol = 'ETH/USDT'  # 交易对 - 现在从命令行参数获取
 timeframe = '15m'  # 时间框架：15分钟
 limit = 400  # 获取的数据条数，最多获取1000个数据点
 
