@@ -7,7 +7,7 @@ from model import Kronos, KronosTokenizer, KronosPredictor
 import matplotlib.dates as mdates
 import sys
 
-def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol):
+def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol, timeframe):
     # 将所有时间戳转换为 naive 时间戳，去掉时区信息
     kline_df['timestamp'] = kline_df['timestamp'].dt.tz_localize(None)
     pred_df.index = pred_df.index.tz_localize(None)
@@ -18,7 +18,7 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol):
 
     # 绘制左边的历史数据（历史 Close Price）
     ax1.plot(kline_df['timestamp'], kline_df['close'], label='Close Price', color='blue', linewidth=1.5)
-    ax1.set_title(f'{symbol} History', fontsize=16)
+    ax1.set_title(f'{symbol} History ({timeframe})', fontsize=16)
     ax1.set_xlabel('', fontsize=12)
     ax1.set_ylabel('Close Price', fontsize=12)
     ax1.grid(True)
@@ -26,7 +26,7 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol):
 
     # 绘制右边的预测数据（预测 Close Price）
     ax2.plot(y_timestamp, pred_df['close'], label='Predicted Close Price', color='red', linewidth=1.5)
-    ax2.set_title(f'{symbol} Predicted', fontsize=16)
+    ax2.set_title(f'{symbol} Predicted ({timeframe})', fontsize=16)
     ax2.set_xlabel('', fontsize=12)
     ax2.set_ylabel('Close Price', fontsize=12)
     ax2.grid(True)
@@ -42,8 +42,8 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol):
 
     plt.tight_layout()
     plt.show()
-    # 使用symbol作为文件名
-    filename = f'{symbol.replace("/", "_")}_prediction.png'
+    # 使用symbol和timeframe作为文件名
+    filename = f'{symbol.replace("/", "_")}_{timeframe}_prediction.png'
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     print(f"图表已保存为: {filename}")
     plt.close()
@@ -51,13 +51,55 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol):
 def calculate_percentage_change(actual, predicted):
     return (predicted - actual) / actual * 100
 
+def get_timedelta_from_timeframe(timeframe):
+    """根据timeframe获取对应的timedelta"""
+    if timeframe == '1m':
+        return pd.Timedelta(minutes=1)
+    elif timeframe == '3m':
+        return pd.Timedelta(minutes=3)
+    elif timeframe == '5m':
+        return pd.Timedelta(minutes=5)
+    elif timeframe == '15m':
+        return pd.Timedelta(minutes=15)
+    elif timeframe == '30m':
+        return pd.Timedelta(minutes=30)
+    elif timeframe == '1h':
+        return pd.Timedelta(hours=1)
+    elif timeframe == '2h':
+        return pd.Timedelta(hours=2)
+    elif timeframe == '4h':
+        return pd.Timedelta(hours=4)
+    elif timeframe == '6h':
+        return pd.Timedelta(hours=6)
+    elif timeframe == '8h':
+        return pd.Timedelta(hours=8)
+    elif timeframe == '12h':
+        return pd.Timedelta(hours=12)
+    elif timeframe == '1d':
+        return pd.Timedelta(days=1)
+    elif timeframe == '3d':
+        return pd.Timedelta(days=3)
+    elif timeframe == '1w':
+        return pd.Timedelta(weeks=1)
+    elif timeframe == '1M':
+        return pd.Timedelta(days=30)
+    else:
+        # 默认返回15分钟
+        print(f"警告: 未知的时间框架 {timeframe}, 使用默认的15分钟")
+        return pd.Timedelta(minutes=15)
+
 # 获取命令行参数
 if len(sys.argv) > 1:
     symbol = sys.argv[1]  # 从命令行获取交易对
 else:
     symbol = 'ETH/USDT'  # 默认交易对
 
-print(f"正在分析交易对: {symbol}")
+if len(sys.argv) > 2:
+    timeframe = sys.argv[2]  # 从命令行获取时间框架
+else:
+    timeframe = '15m'  # 默认时间框架
+
+print(f"正在分析交易对: {symbol}, 时间框架: {timeframe}")
 
 # 获取 {symbol} 的历史数据
 # exchange = ccxt.binance()  # 初始化 Binance API
@@ -79,7 +121,7 @@ exchange = ccxt.binance({
     }
 })
 # symbol = 'ETH/USDT'  # 交易对 - 现在从命令行参数获取
-timeframe = '15m'  # 时间框架：15分钟
+# timeframe = '15m'  # 时间框架 - 现在从命令行参数获取
 limit = 400  # 获取的数据条数，最多获取1000个数据点
 
 # 获取数据
@@ -116,10 +158,11 @@ x_timestamp = pd.Series(df['timestamp'])  # 获取最新的时间戳，确保顺
 
 # 生成未来预测的时间戳（接在最后一根K线之后）
 last_time = df['timestamp'].iloc[-1]
+time_delta = get_timedelta_from_timeframe(timeframe)
 y_timestamp = pd.Series(pd.date_range(
-    start=last_time + pd.Timedelta(minutes=15),
+    start=last_time + time_delta,
     periods=pred_len,
-    freq='15min',
+    freq=time_delta,
     tz="Asia/Shanghai"  # 明确设置时区为 Asia/Shanghai
 ))
 
@@ -152,7 +195,7 @@ print("\n预测的涨跌幅度：")
 print(pred_changes)
 
 # 可视化预测数据与历史数据
-plot_history_and_prediction(df, pred_df, y_timestamp, symbol)
+plot_history_and_prediction(df, pred_df, y_timestamp, symbol, timeframe)
 
 # 输出详细的预测和涨跌幅度数据
 print("\n详细预测结果及涨跌幅度：")
