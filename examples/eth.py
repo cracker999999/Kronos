@@ -1,5 +1,7 @@
 import ccxt
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')  # 使用不需要图形界面的后端
 import matplotlib.pyplot as plt
 from model import Kronos, KronosTokenizer, KronosPredictor
 import matplotlib.dates as mdates
@@ -36,6 +38,8 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp):
 
     plt.tight_layout()
     plt.show()
+    plt.savefig('eth_prediction.png', dpi=300, bbox_inches='tight')
+    plt.close()
 
 def calculate_percentage_change(actual, predicted):
     return (predicted - actual) / actual * 100
