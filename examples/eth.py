@@ -34,6 +34,9 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol):
     # 格式化 X 轴为日期时间
     ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
     ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
+    # 设置日期标签字号
+    ax1.tick_params(axis='x', labelsize=8)
+    ax2.tick_params(axis='x', labelsize=8)
     plt.xticks(rotation=30)
 
     plt.tight_layout()
