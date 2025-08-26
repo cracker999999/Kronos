@@ -32,8 +32,8 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp):
     ax2.legend(loc='upper left', fontsize=12)
 
     # 格式化 X 轴为日期时间
-    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
-    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d %H:%M'))
+    ax1.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
+    ax2.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
     plt.xticks(rotation=45)
 
     plt.tight_layout()
