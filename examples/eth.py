@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from model import Kronos, KronosTokenizer, KronosPredictor
 import matplotlib.dates as mdates
 
-def plot_history_and_prediction(kline_df, pred_df, y_timestamp):
+def plot_history_and_prediction(kline_df, pred_df, y_timestamp, symbol):
     # 将所有时间戳转换为 naive 时间戳，去掉时区信息
     kline_df['timestamp'] = kline_df['timestamp'].dt.tz_localize(None)
     pred_df.index = pred_df.index.tz_localize(None)
@@ -17,17 +17,17 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp):
 
     # 绘制左边的历史数据（历史 Close Price）
     ax1.plot(kline_df['timestamp'], kline_df['close'], label='Close Price', color='blue', linewidth=1.5)
-    ax1.set_title('历史数据', fontsize=16)
+    ax1.set_title(f'{symbol} History', fontsize=16)
     ax1.set_xlabel('', fontsize=12)
-    ax1.set_ylabel('收盘价', fontsize=12)
+    ax1.set_ylabel('Close Price', fontsize=12)
     ax1.grid(True)
     ax1.legend(loc='upper left', fontsize=12)
 
     # 绘制右边的预测数据（预测 Close Price）
     ax2.plot(y_timestamp, pred_df['close'], label='Predicted Close Price', color='red', linewidth=1.5)
-    ax2.set_title('预测数据', fontsize=16)
+    ax2.set_title(f'{symbol} Predicted', fontsize=16)
     ax2.set_xlabel('', fontsize=12)
-    ax2.set_ylabel('收盘价', fontsize=12)
+    ax2.set_ylabel('Close Price', fontsize=12)
     ax2.grid(True)
     ax2.legend(loc='upper left', fontsize=12)
 
@@ -38,7 +38,10 @@ def plot_history_and_prediction(kline_df, pred_df, y_timestamp):
 
     plt.tight_layout()
     plt.show()
-    plt.savefig('eth_prediction.png', dpi=300, bbox_inches='tight')
+    # 使用symbol作为文件名
+    filename = f'{symbol.replace("/", "_")}_prediction.png'
+    plt.savefig(filename, dpi=300, bbox_inches='tight')
+    print(f"图表已保存为: {filename}")
     plt.close()
 
 def calculate_percentage_change(actual, predicted):
@@ -137,7 +140,7 @@ print("\n预测的涨跌幅度：")
 print(pred_changes)
 
 # 可视化预测数据与历史数据
-plot_history_and_prediction(df, pred_df, y_timestamp)
+plot_history_and_prediction(df, pred_df, y_timestamp, symbol)
 
 # 输出详细的预测和涨跌幅度数据
 print("\n详细预测结果及涨跌幅度：")
