@@ -110,7 +110,7 @@ exchange = ccxt.binance({
             'private': 'https://zysipeyigmoy.eu-central-1.clawcloudrun.com/api/v3',
         }
     },
-    'timeout': 30000,  # 30秒超时
+    'timeout': 60000,  # 30秒超时
     'enableRateLimit': True,  # 启用速率限制
     'options': {
         'fetchMarkets': ['spot'],  # 只获取现货市场
